@@ -8,6 +8,8 @@ def realesrgan_models_names():
 def postprocessing_scripts():
     import modules.scripts
 
+    if not modules.scripts.scripts_postproc.scripts:
+        return []
     return modules.scripts.scripts_postproc.scripts
 
 

@@ -500,176 +500,175 @@ def create_ui():
 
             ui_extra_networks.setup_ui(extra_networks_ui, txt2img_gallery)
 
-    # def create_setting_component(key, is_quicksettings=False):
-    #     def fun():
-    #         return opts.data[key] if key in opts.data else opts.data_labels[key].default
+    def create_setting_component(key, is_quicksettings=False):
+        def fun():
+            return opts.data[key] if key in opts.data else opts.data_labels[key].default
 
-    #     info = opts.data_labels[key]
-    #     t = type(info.default)
+        info = opts.data_labels[key]
+        t = type(info.default)
 
-    #     args = info.component_args() if callable(info.component_args) else info.component_args
+        args = info.component_args() if callable(info.component_args) else info.component_args
 
-    #     if info.component is not None:
-    #         comp = info.component
-    #     elif t == str:
-    #         comp = gr.Textbox
-    #     elif t == int:
-    #         comp = gr.Number
-    #     elif t == bool:
-    #         comp = gr.Checkbox
-    #     else:
-    #         raise Exception(f'bad options item type: {str(t)} for key {key}')
+        if info.component is not None:
+            comp = info.component
+        elif t == str:
+            comp = gr.Textbox
+        elif t == int:
+            comp = gr.Number
+        elif t == bool:
+            comp = gr.Checkbox
+        else:
+            raise Exception(f'bad options item type: {str(t)} for key {key}')
 
-    #     elem_id = "setting_"+key
+        elem_id = "setting_"+key
 
-    #     if info.refresh is not None:
-    #         if is_quicksettings:
-    #             res = comp(label=info.label, value=fun(), elem_id=elem_id, **(args or {}))
-    #             create_refresh_button(res, info.refresh, info.component_args, "refresh_" + key)
-    #         else:
-    #             with FormRow():
-    #                 res = comp(label=info.label, value=fun(), elem_id=elem_id, **(args or {}))
-    #                 create_refresh_button(res, info.refresh, info.component_args, "refresh_" + key)
-    #     else:
-    #         res = comp(label=info.label, value=fun(), elem_id=elem_id, **(args or {}))
+        if info.refresh is not None:
+            if is_quicksettings:
+                res = comp(label=info.label, value=fun(), elem_id=elem_id, **(args or {}))
+                create_refresh_button(res, info.refresh, info.component_args, "refresh_" + key)
+            else:
+                with FormRow():
+                    res = comp(label=info.label, value=fun(), elem_id=elem_id, **(args or {}))
+                    create_refresh_button(res, info.refresh, info.component_args, "refresh_" + key)
+        else:
+            res = comp(label=info.label, value=fun(), elem_id=elem_id, **(args or {}))
 
-    #     return res
+        return res
 
-    # components = []
-    # component_dict = {}
-    # shared.settings_components = component_dict
+    components = []
+    component_dict = {}
+    shared.settings_components = component_dict
 
-    # script_callbacks.ui_settings_callback()
-    # opts.reorder()
+    script_callbacks.ui_settings_callback()
+    opts.reorder()
 
-    # def run_settings(*args):
-    #     changed = []
+    def run_settings(*args):
+        changed = []
 
-    #     for key, value, comp in zip(opts.data_labels.keys(), args, components):
-    #         assert comp == dummy_component or opts.same_type(value, opts.data_labels[key].default), f"Bad value for setting {key}: {value}; expecting {type(opts.data_labels[key].default).__name__}"
+        for key, value, comp in zip(opts.data_labels.keys(), args, components):
+            assert comp == dummy_component or opts.same_type(value, opts.data_labels[key].default), f"Bad value for setting {key}: {value}; expecting {type(opts.data_labels[key].default).__name__}"
 
-    #     for key, value, comp in zip(opts.data_labels.keys(), args, components):
-    #         if comp == dummy_component:
-    #             continue
+        for key, value, comp in zip(opts.data_labels.keys(), args, components):
+            if comp == dummy_component:
+                continue
 
-    #         if opts.set(key, value):
-    #             changed.append(key)
+            if opts.set(key, value):
+                changed.append(key)
 
-    #     try:
-    #         opts.save(shared.config_filename)
-    #     except RuntimeError:
-    #         return opts.dumpjson(), f'{len(changed)} settings changed without save: {", ".join(changed)}.'
-    #     return opts.dumpjson(), f'{len(changed)} settings changed{": " if len(changed) > 0 else ""}{", ".join(changed)}.'
+        try:
+            opts.save(shared.config_filename)
+        except RuntimeError:
+            return opts.dumpjson(), f'{len(changed)} settings changed without save: {", ".join(changed)}.'
+        return opts.dumpjson(), f'{len(changed)} settings changed{": " if len(changed) > 0 else ""}{", ".join(changed)}.'
 
-    # def run_settings_single(value, key):
-    #     if not opts.same_type(value, opts.data_labels[key].default):
-    #         return gr.update(visible=True), opts.dumpjson()
+    def run_settings_single(value, key):
+        if not opts.same_type(value, opts.data_labels[key].default):
+            return gr.update(visible=True), opts.dumpjson()
 
-    #     if not opts.set(key, value):
-    #         return gr.update(value=getattr(opts, key)), opts.dumpjson()
+        if not opts.set(key, value):
+            return gr.update(value=getattr(opts, key)), opts.dumpjson()
 
-    #     opts.save(shared.config_filename)
+        opts.save(shared.config_filename)
 
-    #     return get_value_for_setting(key), opts.dumpjson()
+        return get_value_for_setting(key), opts.dumpjson()
 
-    # with gr.Blocks(analytics_enabled=False) as settings_interface:
-    #     with gr.Row():
-    #         with gr.Column(scale=6):
-    #             settings_submit = gr.Button(value="Apply settings", variant='primary', elem_id="settings_submit")
-    #         with gr.Column():
-    #             restart_gradio = gr.Button(value='Reload UI', variant='primary', elem_id="settings_restart_gradio")
+    with gr.Blocks(analytics_enabled=False) as settings_interface:
+        with gr.Row():
+            with gr.Column(scale=6):
+                settings_submit = gr.Button(value="Apply settings", variant='primary', elem_id="settings_submit")
+            with gr.Column():
+                restart_gradio = gr.Button(value='Reload UI', variant='primary', elem_id="settings_restart_gradio")
 
-    #     result = gr.HTML(elem_id="settings_result")
+        result = gr.HTML(elem_id="settings_result")
 
-    #     quicksettings_names = [x.strip() for x in opts.quicksettings.split(",")]
-    #     quicksettings_names = {x: i for i, x in enumerate(quicksettings_names) if x != 'quicksettings'}
+        quicksettings_names = [x.strip() for x in opts.quicksettings.split(",")]
+        quicksettings_names = {x: i for i, x in enumerate(quicksettings_names) if x != 'quicksettings'}
 
-    #     quicksettings_list = []
+        quicksettings_list = []
 
-    #     previous_section = None
-    #     current_tab = None
-    #     current_row = None
-    #     with gr.Tabs(elem_id="settings"):
-    #         for i, (k, item) in enumerate(opts.data_labels.items()):
-    #             section_must_be_skipped = item.section[0] is None
+        previous_section = None
+        current_tab = None
+        current_row = None
+        with gr.Tabs(elem_id="settings"):
+            for i, (k, item) in enumerate(opts.data_labels.items()):
+                section_must_be_skipped = item.section[0] is None
 
-    #             if previous_section != item.section and not section_must_be_skipped:
-    #                 elem_id, text = item.section
+                if previous_section != item.section and not section_must_be_skipped:
+                    elem_id, text = item.section
 
-    #                 if current_tab is not None:
-    #                     current_row.__exit__()
-    #                     current_tab.__exit__()
+                    if current_tab is not None:
+                        current_row.__exit__()
+                        current_tab.__exit__()
 
-    #                 gr.Group()
-    #                 current_tab = gr.TabItem(elem_id="settings_{}".format(elem_id), label=text)
-    #                 current_tab.__enter__()
-    #                 current_row = gr.Column(variant='compact')
-    #                 current_row.__enter__()
+                    gr.Group()
+                    current_tab = gr.TabItem(elem_id="settings_{}".format(elem_id), label=text)
+                    current_tab.__enter__()
+                    current_row = gr.Column(variant='compact')
+                    current_row.__enter__()
 
-    #                 previous_section = item.section
+                    previous_section = item.section
 
-    #             if k in quicksettings_names and not shared.cmd_opts.freeze_settings:
-    #                 quicksettings_list.append((i, k, item))
-    #                 components.append(dummy_component)
-    #             elif section_must_be_skipped:
-    #                 components.append(dummy_component)
-    #             else:
-    #                 component = create_setting_component(k)
-    #                 component_dict[k] = component
-    #                 components.append(component)
+                if k in quicksettings_names and not shared.cmd_opts.freeze_settings:
+                    quicksettings_list.append((i, k, item))
+                    components.append(dummy_component)
+                elif section_must_be_skipped:
+                    components.append(dummy_component)
+                else:
+                    component = create_setting_component(k)
+                    component_dict[k] = component
+                    components.append(component)
 
-    #         if current_tab is not None:
-    #             current_row.__exit__()
-    #             current_tab.__exit__()
+            if current_tab is not None:
+                current_row.__exit__()
+                current_tab.__exit__()
 
-    #         with gr.TabItem("Actions"):
-    #             request_notifications = gr.Button(value='Request browser notifications', elem_id="request_notifications")
-    #             download_localization = gr.Button(value='Download localization template', elem_id="download_localization")
-    #             reload_script_bodies = gr.Button(value='Reload custom script bodies (No ui updates, No restart)', variant='secondary', elem_id="settings_reload_script_bodies")
+            with gr.TabItem("Actions"):
+                request_notifications = gr.Button(value='Request browser notifications', elem_id="request_notifications")
+                download_localization = gr.Button(value='Download localization template', elem_id="download_localization")
+                reload_script_bodies = gr.Button(value='Reload custom script bodies (No ui updates, No restart)', variant='secondary', elem_id="settings_reload_script_bodies")
 
-    #         with gr.TabItem("Licenses"):
-    #             gr.HTML(shared.html("licenses.html"), elem_id="licenses")
+            with gr.TabItem("Licenses"):
+                gr.HTML(shared.html("licenses.html"), elem_id="licenses")
 
-    #         gr.Button(value="Show all pages", elem_id="settings_show_all_pages")
+            gr.Button(value="Show all pages", elem_id="settings_show_all_pages")
 
-    #     request_notifications.click(
-    #         fn=lambda: None,
-    #         inputs=[],
-    #         outputs=[],
-    #         _js='function(){}'
-    #     )
+        request_notifications.click(
+            fn=lambda: None,
+            inputs=[],
+            outputs=[],
+            _js='function(){}'
+        )
 
-    #     download_localization.click(
-    #         fn=lambda: None,
-    #         inputs=[],
-    #         outputs=[],
-    #         _js='download_localization'
-    #     )
+        download_localization.click(
+            fn=lambda: None,
+            inputs=[],
+            outputs=[],
+            _js='download_localization'
+        )
 
-    #     def reload_scripts():
-    #         modules.scripts.reload_script_body_only()
-    #         reload_javascript()  # need to refresh the html page
+        def reload_scripts():
+            modules.scripts.reload_script_body_only()
+            reload_javascript()  # need to refresh the html page
 
-    #     reload_script_bodies.click(
-    #         fn=reload_scripts,
-    #         inputs=[],
-    #         outputs=[]
-    #     )
+        reload_script_bodies.click(
+            fn=reload_scripts,
+            inputs=[],
+            outputs=[]
+        )
 
-    #     def request_restart():
-    #         shared.state.interrupt()
-    #         shared.state.need_restart = True
+        def request_restart():
+            shared.state.interrupt()
+            shared.state.need_restart = True
 
-    #     restart_gradio.click(
-    #         fn=request_restart,
-    #         _js='restart_reload',
-    #         inputs=[],
-    #         outputs=[],
-    #     )
-
+        restart_gradio.click(
+            fn=request_restart,
+            _js='restart_reload',
+            inputs=[],
+            outputs=[],
+        )
 
     interfaces = [
-        (txt2img_interface, "txt2img", "txt2img"),
+        (txt2img_interface, "在线推理", "txt2img"),
     ]
 
     css = ""
@@ -692,10 +691,10 @@ def create_ui():
     # interfaces += [(settings_interface, "Settings", "settings")]
 
     with gr.Blocks(css=css, analytics_enabled=False, title="Stable Diffusion") as demo:
-        # with gr.Row(elem_id="quicksettings", variant="compact"):
-        #     for i, k, item in sorted(quicksettings_list, key=lambda x: quicksettings_names.get(x[1], x[0])):
-        #         component = create_setting_component(k, is_quicksettings=True)
-        #         component_dict[k] = component
+        with gr.Row(elem_id="quicksettings", variant="compact"):
+            for i, k, item in sorted(quicksettings_list, key=lambda x: quicksettings_names.get(x[1], x[0])):
+                component = create_setting_component(k, is_quicksettings=True)
+                component_dict[k] = component
 
         # parameters_copypaste.connect_paste_params_buttons()
 
