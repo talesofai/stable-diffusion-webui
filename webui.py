@@ -39,7 +39,7 @@ import modules.script_callbacks
 import modules.textual_inversion.textual_inversion
 import modules.progress
 
-import modules.ui
+import modules.simple_ui
 from modules import modelloader
 from modules.shared import cmd_opts
 import modules.hypernetworks.hypernetwork
@@ -202,7 +202,7 @@ def webui():
 
         modules.script_callbacks.before_ui_callback()
 
-        shared.demo = modules.ui.create_ui()
+        shared.demo = modules.simple_ui.create_ui()
 
         if cmd_opts.gradio_queue:
             shared.demo.queue(64)
@@ -255,7 +255,7 @@ def webui():
         modules.script_callbacks.model_loaded_callback(shared.sd_model)
         modelloader.load_upscalers()
 
-        for module in [module for name, module in sys.modules.items() if name.startswith("modules.ui")]:
+        for module in [module for name, module in sys.modules.items() if name.startswith("modules.simple_ui")]:
             importlib.reload(module)
 
         modules.sd_models.list_models()

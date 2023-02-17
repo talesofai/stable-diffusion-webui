@@ -406,11 +406,11 @@ def create_output_panel(tabname, outdir):
 
 def create_sampler_and_steps_selection(choices, tabname):
     if opts.samplers_in_dropdown:
-        with FormRow(elem_id=f"sampler_selection_{tabname}"):
+        with FormRow(elem_id=f"sampler_selection_{tabname}", visible=False):
             sampler_index = gr.Dropdown(label='Sampling method', elem_id=f"{tabname}_sampling", choices=[x.name for x in choices], value=choices[0].name, type="index")
             steps = gr.Slider(minimum=1, maximum=150, step=1, elem_id=f"{tabname}_steps", label="Sampling steps", value=20)
     else:
-        with FormGroup(elem_id=f"sampler_selection_{tabname}"):
+        with FormGroup(elem_id=f"sampler_selection_{tabname}", visible=False):
             steps = gr.Slider(minimum=1, maximum=150, step=1, elem_id=f"{tabname}_steps", label="Sampling steps", value=20)
             sampler_index = gr.Radio(label='Sampling method', elem_id=f"{tabname}_sampling", choices=[x.name for x in choices], value=choices[0].name, type="index")
 
@@ -1529,12 +1529,12 @@ def create_ui():
         )
 
     interfaces = [
-        (txt2img_interface, "txt2img", "txt2img"),
-        (img2img_interface, "img2img", "img2img"),
-        (extras_interface, "Extras", "extras"),
-        (pnginfo_interface, "PNG Info", "pnginfo"),
-        (modelmerger_interface, "Checkpoint Merger", "modelmerger"),
-        (train_interface, "Train", "ti"),
+        (txt2img_interface, "在线推理", "txt2img"),
+        # (img2img_interface, "img2img", "img2img"),
+        # (extras_interface, "Extras", "extras"),
+        # (pnginfo_interface, "PNG Info", "pnginfo"),
+        # (modelmerger_interface, "Checkpoint Merger", "modelmerger"),
+        # (train_interface, "Train", "ti"),
     ]
 
     css = ""
@@ -1554,10 +1554,10 @@ def create_ui():
         css += css_hide_progressbar
 
     interfaces += script_callbacks.ui_tabs_callback()
-    interfaces += [(settings_interface, "Settings", "settings")]
+    # interfaces += [(settings_interface, "Settings", "settings")]
 
-    extensions_interface = ui_extensions.create_ui()
-    interfaces += [(extensions_interface, "Extensions", "extensions")]
+    # extensions_interface = ui_extensions.create_ui()
+    # interfaces += [(extensions_interface, "Extensions", "extensions")]
 
     with gr.Blocks(css=css, analytics_enabled=False, title="Stable Diffusion") as demo:
         with gr.Row(elem_id="quicksettings", variant="compact"):

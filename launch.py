@@ -248,6 +248,7 @@ def prepare_environment():
 
     sys.argv, _ = extract_arg(sys.argv, '-f')
     sys.argv, skip_torch_cuda_test = extract_arg(sys.argv, '--skip-torch-cuda-test')
+    skip_torch_cuda_test = True
     sys.argv, skip_python_version_check = extract_arg(sys.argv, '--skip-python-version-check')
     sys.argv, reinstall_xformers = extract_arg(sys.argv, '--reinstall-xformers')
     sys.argv, reinstall_torch = extract_arg(sys.argv, '--reinstall-torch')
