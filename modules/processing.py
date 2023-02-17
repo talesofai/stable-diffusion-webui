@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional
 
 import modules.sd_hijack
 from modules import devices, prompt_parser, masking, sd_samplers, lowvram, generation_parameters_copypaste, script_callbacks, extra_networks, sd_vae_approx, scripts
-from modules.sd_hijack import model_hijack
+from modules.sd_hijack_bk import model_hijack
 from modules.shared import opts, cmd_opts, state
 import modules.shared as shared
 import modules.paths as paths
