@@ -1,6 +1,7 @@
 import numpy as np
 import gradio as gr
 
+from launch import prepare_environment
 from modules import simple_ui
 
 
@@ -17,5 +18,6 @@ def sepia(input_img):
 if __name__ == '__main__':
     # demo = gr.Interface(sepia, gr.Image(shape=(200, 200)), "image")
     
+    # prepare_environment()
     demo = simple_ui.create_ui()
     demo.launch(share=False, server_name="0.0.0.0", server_port=6006)
