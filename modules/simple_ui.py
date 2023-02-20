@@ -1556,8 +1556,8 @@ def create_ui():
     interfaces += script_callbacks.ui_tabs_callback()
     # interfaces += [(settings_interface, "Settings", "settings")]
 
-    # extensions_interface = ui_extensions.create_ui()
-    # interfaces += [(extensions_interface, "Extensions", "extensions")]
+    extensions_interface = ui_extensions.create_ui()
+    interfaces += [(extensions_interface, "Extensions", "extensions")]
 
     with gr.Blocks(css=css, analytics_enabled=False, title="Stable Diffusion") as demo:
         with gr.Row(elem_id="quicksettings", variant="compact"):
